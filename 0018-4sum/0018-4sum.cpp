@@ -2,60 +2,58 @@ class Solution {
 public:
     vector<vector<int>> fourSum(vector<int>& nums, int target) {
         
-        //time O(n^3)
-        //space=O(1)
-        
-        vector<vector<int>>result;
-        int n=nums.size();
-        
-        if(n<4)return result;
+        vector<vector<int>>ans;
         
         sort(nums.begin(),nums.end());
         
-        for(int i=0;i<n;i++){
-            
-            for(int j=i+1;j<n;j++){
-                
-                long long int target2=1LL*target-1LL*nums[i]-1LL*nums[j];
-                
-                int left=j+1;
-                int right=n-1;
-                
-                while(left<right){
-                    
-                    long long two_sum=nums[left]+nums[right];
-                    
-                    if(two_sum<target2) left++;
-                    
-                    else if(two_sum>target2) right--;
-                    
-                    else{
-                        
-                        vector<int>quad(4,0);
-                        quad[0]=(int)nums[i];
-                        quad[1]=(int)nums[j];
-                        quad[2]=(int)nums[left];
-                        quad[3]=(int)nums[right];
-                        
-                        result.push_back(quad);
-                        
-                         while(left<right && nums[left]==quad[2]) ++left;
-                         while(left<right && nums[right]==quad[3]) --right;
-                        
-                        
-                    }
-                    
-                    
-                }
-                
-                while(j+1<n && nums[j+1]==nums[j])++j;
-                
-                
-            }
+        int n=nums.size();
         
-           while(i+1<n && nums[i+1]==nums[i])++i;
+        for(int i=0;i<n-3;i++){
+            
+            if(i>0 && nums[i]==nums[i-1])continue;
+            
+            for(int j=i+1;j<n-2;j++){
+                 
+                if(j>i+1 && nums[j]==nums[j-1])continue;
+                
+                int low=j+1;
+                int high=n-1;
+                
+                while(low<high){
+
+                    long long sum=long(nums[low])+nums[high]+nums[j]+nums[i];
+
+                    if(sum>target){
+                        high--;
+                    }
+                    else if(sum<target){
+                        low++;
+                    }
+                    else{
+                        ans.push_back({nums[low],nums[high],nums[j],nums[i]});
+
+                        while(low<high && nums[low]==nums[low+1]){
+                            low++;
+                        }
+
+                        while(low<high && nums[high]==nums[high-1]){
+                            high--;
+                        }
+                        
+                        low++;
+                        high--;
+
+                    }
+                
+                }
+               
+                
+                
+            }  
+            
         }
-        return result;
+        
+        return ans;
+        
     }
 };
-
